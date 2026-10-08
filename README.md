@@ -29,6 +29,7 @@ It's built for the "one emoji, right now" moment: open, search, click to copy, k
 - i18n ready with Fluent-based localization
 - Fixed-size window designed for quick, repeatable use
 - Click to copy to clipboard and automatically close
+- Auto-paste into the window you were typing in, through the RemoteDesktop portal (COSMIC 1.7+; falls back to copy-only)
 - Single-instance guard to prevent multiple windows stacking up
 
 ### Keyboard Shortcuts
@@ -192,13 +193,15 @@ Glyphie uses `wl-copy` from `wl-clipboard` so copied emojis remain available aft
 
 For best emoji rendering, install a color emoji font such as `Noto Color Emoji`.
 
+Auto-paste uses the `org.freedesktop.portal.RemoteDesktop` portal, which `xdg-desktop-portal-cosmic` provides from COSMIC 1.7. The first time, COSMIC asks for permission to control the keyboard; Glyphie saves the portal's restore token so it asks only once. After you pick, Glyphie copies with `wl-copy`, closes its window, waits `paste_delay_ms` (150 ms by default) for focus to return, then presses Ctrl+V (or Ctrl+Shift+V for terminals, set in Settings). If the portal is missing or you deny it, Glyphie only copies. The Flatpak needs no extra permissions: portals are always reachable from the sandbox.
+
 ## Configuration & state
 
 Glyphie uses `cosmic-config` for all persistent data, split into two stores:
 
-- **Config** (user preferences): skin tone, gender filter, subcategory toggle
+- **Config** (user preferences): skin tone, gender filter, subcategory toggle, auto-paste (`auto_paste`, `paste_shortcut`, `paste_delay_ms`)
   - `~/.config/cosmic/com.lkbddh.Glyphie/v1/`
-- **State** (runtime data): recent emojis history
+- **State** (runtime data): recent emojis history, auto-paste portal restore token
   - `~/.local/state/cosmic/com.lkbddh.Glyphie/v1/`
 
 Changes are picked up live — editing the config files externally will update the running app.

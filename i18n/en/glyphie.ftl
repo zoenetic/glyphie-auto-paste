@@ -35,6 +35,10 @@ skin-tone-dark = Dark skin tone
 # Settings
 settings = Settings
 show-subcategories = Show subcategories
+auto-paste = Paste after copying
+paste-shortcut = Paste shortcut
+paste-shortcut-ctrl-v = Ctrl+V
+paste-shortcut-ctrl-shift-v = Ctrl+Shift+V (terminals)
 information = Information
 version = Version
 
