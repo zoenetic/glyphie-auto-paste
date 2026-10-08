@@ -5,6 +5,7 @@ use cosmic::Element;
 
 use crate::emoji_data::{emoji_data_loaded, EmojiCategory, GenderFilter, SkinTone, EMOJIS};
 use crate::fl;
+use crate::paste::PasteShortcut;
 use crate::theme::{
     accent_tint_button, chip_button, text_muted, CATEGORY_BUTTON_H, CATEGORY_ICON_SIZE,
     CHIP_EMOJI_SIZE, CHIP_HEIGHT, CHIP_PADDING_H, CHIP_PADDING_V, EMOJI_BUTTON_SIZE, EMOJI_FONT,
@@ -240,13 +241,25 @@ impl CosmicEmojiPicker {
         let subcategory_toggle =
             widget::toggler(self.config.show_subcategories).on_toggle(Message::ToggleSubcategories);
 
-        let settings_section =
-            widget::settings::section()
-                .title(fl!("settings"))
-                .add(widget::settings::item(
-                    fl!("show-subcategories"),
-                    subcategory_toggle,
-                ));
+        let auto_paste_toggle =
+            widget::toggler(self.config.auto_paste).on_toggle(Message::ToggleAutoPaste);
+        let paste_shortcut = widget::dropdown(
+            PasteShortcut::labels(),
+            Some(self.config.paste_shortcut.position()),
+            |i| Message::SelectPasteShortcut(PasteShortcut::ALL[i]),
+        );
+
+        let settings_section = widget::settings::section()
+            .title(fl!("settings"))
+            .add(widget::settings::item(
+                fl!("show-subcategories"),
+                subcategory_toggle,
+            ))
+            .add(widget::settings::item(fl!("auto-paste"), auto_paste_toggle))
+            .add(widget::settings::item(
+                fl!("paste-shortcut"),
+                paste_shortcut,
+            ));
 
         let about_section =
             widget::settings::section()
